@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ThemeGenie Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #000000;
+            --gray-900: #0a0a0a;
+            --gray-800: #171717;
+            --border: #262626;
+            --text-main: #ffffff;
+            --text-dim: #737373;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 60px;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 { font-size: 0.8rem; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; margin: 0; }
+
+        .toolbar { display: flex; gap: 20px; }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.1s;
+        }
+
+        button:hover { border-color: var(--text-main); }
+        .primary-btn { background: var(--text-main); color: var(--black); border-color: var(--text-main); }
+        .primary-btn:hover { background: transparent; color: var(--text-main); }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .theme-card {
+            background: var(--black);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .theme-info h3 { font-size: 0.9rem; font-weight: 500; margin: 0 0 4px 0; }
+        .domain { color: var(--text-dim); font-size: 0.75rem; font-family: 'JetBrains Mono'; }
+
+        .actions { display: flex; gap: 16px; }
+        .action-btn { border: none; padding: 0; text-decoration: underline; color: var(--text-dim); }
+        .action-btn:hover { color: var(--text-main); }
+        .delete-btn { color: #525252; }
+        .delete-btn:hover { color: #ef4444; }
+
+        /* Full Screen Editor Overlay */
+        #editor-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--black);
+            display: none;
+            padding: 60px;
+            z-index: 1000;
+        }
+
+        #editor-overlay.active { display: block; }
+
+        .editor-content {
+            max-width: 900px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 0;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            outline: none;
+        }
+
+        #full-css-editor {
+            flex: 1;
+            background: var(--gray-900);
+            border: 1px solid var(--border);
+            color: #d4d4d4;
+            padding: 30px;
+            font-family: 'JetBrains Mono';
+            font-size: 0.85rem;
+            resize: none;
+            outline: none;
+        }
+
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Manager</h1>
+            <div class="toolbar">
+                <input type="password" id="gemini-key" placeholder="Gemini API Key" style="font-size: 0.75rem; width: 200px; margin-bottom: 0;">
+                <input type="file" id="import-input" accept=".json,.css,.themegenie" style="display:none">
+                <button id="import-btn">Import</button>
+                <button id="export-btn">Export</button>
+                <button id="edit-global-btn">Global CSS</button>
+                <button id="add-new-btn" class="primary-btn">New Theme</button>
+            </div>
+        </header>
+
+        <main>
+            <div class="themes-grid" id="themes-container"></div>
+        </main>
+    </div>
+
+    <div id="editor-overlay">
+        <div class="editor-content">
+            <div class="editor-header">
+                <h1 id="editor-title">Editor</h1>
+                <button id="close-editor-btn" style="border:none">Close</button>
+            </div>
+            <input type="text" id="target-domain" placeholder="Domain (google.com)">
+            <textarea id="full-css-editor" spellcheck="false" placeholder="/* CSS */"></textarea>
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button id="download-css-btn">Download .css</button>
+                <button id="save-theme-btn" class="primary-btn">Save</button>
+            </div>
+        </div>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
