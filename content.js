@@ -15,6 +15,7 @@
             if (document.documentElement) document.documentElement.appendChild(el);
         }
         return el;
+        
     }
 
     function updateStyles() {
